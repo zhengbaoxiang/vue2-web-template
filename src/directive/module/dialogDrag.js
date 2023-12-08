@@ -1,28 +1,28 @@
 /*
  * @Date: 2023-12-08 11:19:29
  * @LastEditors: zbx
- * @LastEditTime: 2023-12-08 13:27:00
+ * @LastEditTime: 2023-12-08 16:38:28
  * @descript: 文件描述
  */
 import Vue from 'vue'
 
 // v-dialogDrag: 弹窗拖拽属性 （重点！！！ 给模态框添加这个属性模态框就能拖拽了）
-  /**
-   * 拖拽指令 v-dialogDrag="options"
-   * options = {
-   *  trigger: /这里传入作为拖拽触发器的CSS选择器/   .el-dialog__header,
-   *  body:    /这里传入需要移动容器的CSS选择器/,   '.el-dialog'
-   *  recover: false  /拖动结束之后是否恢复到原来的位置/
-   * }
-   */
+/**
+ * 拖拽指令 v-dialogDrag="options"
+ * options = {
+ *  trigger: /这里传入作为拖拽触发器的CSS选择器/   .el-dialog__header,
+ *  body:    /这里传入需要移动容器的CSS选择器/,   '.el-dialog'
+ *  recover: false  /拖动结束之后是否恢复到原来的位置/
+ * }
+ */
 
 Vue.directive('dialogDrag', { // 属性名称dialogDrag，前面加v- 使用
     bind(el, binding, vnode) {
-        console.log('-binding>',binding)
-        const trigger = binding.value && binding.value.trigger 
-        const body = binding.value && binding.value.body 
-        const dialogHeaderEl = el.querySelector( trigger || '.el-dialog__header')
-        const dragDom = el.querySelector(body ||  '.el-dialog')
+        console.log('-binding>', binding)
+        const trigger = binding.value && binding.value.trigger
+        const body = binding.value && binding.value.body
+        const dialogHeaderEl = el.querySelector(trigger || '.el-dialog__header')
+        const dragDom = el.querySelector(body || '.el-dialog')
         dialogHeaderEl.style.cssText += ';cursor:move;'
         dragDom.style.cssText += ';top:0px;'
 
