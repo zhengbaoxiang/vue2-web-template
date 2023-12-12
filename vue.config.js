@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 09:45:12
  * @LastEditors: zbx
- * @LastEditTime: 2023-12-08 16:10:53
+ * @LastEditTime: 2023-12-08 16:57:15
  * @descript: 文件描述
  */
 const { defineConfig } = require('@vue/cli-service')
@@ -50,7 +50,7 @@ module.exports = defineConfig({
                 enforceSizeThreshold: 50000,
                 cacheGroups: {
                     // 默认配置之后，自定义
-                    echarts: {
+                    element: {
                         name: "element-ui",
                         test: /[\\/]element-ui[\\/]/,
                         priority: 20,
