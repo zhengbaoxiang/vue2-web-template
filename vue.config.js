@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 09:45:12
  * @LastEditors: zbx
- * @LastEditTime: 2023-12-08 16:57:15
+ * @LastEditTime: 2023-12-12 15:59:39
  * @descript: 文件描述
  */
 const { defineConfig } = require('@vue/cli-service')
@@ -45,8 +45,8 @@ module.exports = defineConfig({
                 minSize: 5*1024,
                 // minRemainingSize: 0,
                 minChunks: 1,
-                maxAsyncRequests: 4,
-                maxInitialRequests: 4,
+                maxAsyncRequests: 30,
+                maxInitialRequests: 5,
                 enforceSizeThreshold: 50000,
                 cacheGroups: {
                     // 默认配置之后，自定义
@@ -72,8 +72,9 @@ module.exports = defineConfig({
                     defaultVendors: {
                         name: 'vendors-default',
                         test: /[\\/]node_modules[\\/]/,
-                        priority: -10,
+                        priority: -20,
                         reuseExistingChunk: true,
+                        chunks: 'async',
                     },
                   
                 }
