@@ -1,39 +1,83 @@
+/*
+ * @Date: 2023-12-07 09:45:12
+ * @LastEditors: zbx
+ * @LastEditTime: 2023-12-13 16:58:27
+ * @descript: 文件描述
+ */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import routes from './routes'
+
+import config from '@/config'
+import { getToken,setToken ,setSession} from '@/libs/util'
+
+import store from '@/store'
+
+const { homeName, title } = config
+const loginName = 'login'
+
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/iview_template',
-    name: 'iview_template',
-    component: () => import(/* webpackChunkName: "page_template_iview" */  '../views/template_iview.vue')
-  },
-  {
-    path: '/element_template',
-    name: 'element_template',
-    component: () => import(/* webpackChunkName: "page_template_ele" */ '../views/template_ele.vue')
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "page_about" */ '../views/AboutView.vue')
-  },
-]
-
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
+    mode: 'history',
+    base: config.publicPath,
+    routes
 })
+
+router.beforeEach((to, from, next) => {
+    console.log('to', to)
+    const token = to.query.token || getToken()
+
+    if (!token && to.name === loginName) {
+        next()
+    } else if (!token && to.name !== loginName) {
+        // 可以在此缓存初始链接，登陆后，回调这个页面,todo
+        setSession('lastUrl',location.href)
+        next({ name: loginName })
+    } else if (token && to.name == loginName) {
+        next({ name: homeName })
+    }else{
+        setToken(token)
+        store.dispatch('getUserInfo').then(access =>{
+            // 判断有无当前页面权限
+            hasPermission(to,access, next)
+        }).catch((err)=>{
+            // 报错就回到登录页
+            // next({ name: loginName })
+        })
+    }
+    next()
+})
+
+
+// 权限点处理
+const hasPermission = (to, access, next) => {
+    const routeItemAccess = to.meta && to.meta.access
+
+    if (!routeItemAccess) {
+        next()
+        return true
+    } else if (hasOneOf(routeItemAccess,access)) {
+        next()
+        return true
+    } else {
+        // 无权限，重定向到401页面L
+        next({ replace: true, name: 'error_401' })
+        return false
+    }
+}
+
+
+router.afterEach((to) => {
+    window.scrollTo(0, 0)
+    setTitle(to, router.app)
+})
+// 设置标题
+const setTitle = (to, vm) => {
+    const pageTitle = to.meta && to.meta.title
+    const resTitle = pageTitle ? `${title} - ${pageTitle}` : title
+    window.document.title = resTitle
+}
 
 export default router
