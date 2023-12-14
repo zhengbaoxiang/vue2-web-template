@@ -1,7 +1,7 @@
 <!--
  * @Date: 2023-12-14 10:35:15
  * @LastEditors: zbx
- * @LastEditTime: 2023-12-14 16:44:03
+ * @LastEditTime: 2023-12-14 16:57:09
  * @descript: 文件描述
 -->
 <template>
@@ -22,8 +22,8 @@
                 <template v-if="hasChild(item)">
                     <Submenu  :name="getNameOrHref(item)" :key="`menu-${item.name}`">
                         <template slot="title">
-                            <!-- <Icon type="ios-analytics"></Icon> -->
-                            {{showTitle(item)}}
+                            <!-- <common-icon :type="item.icon || ''" /> -->
+                            <span>{{showTitle(item)}}</span>
                         </template>
 
                         <template  v-for="subItem in item.children" >
@@ -36,7 +36,8 @@
                 </template>
                 <template v-else>
                     <menu-item :name="getNameOrHref(item)" :key="`menu-${item.name}`">
-                        {{showTitle(item)}}
+                        <!-- <common-icon :type="item.icon || ''" /> -->
+                        <span>{{showTitle(item)}}</span>
                     </menu-item>
                 </template>
             </template>
