@@ -1,17 +1,11 @@
 <!--
  * @Date: 2023-12-07 09:45:12
  * @LastEditors: zbx
- * @LastEditTime: 2023-12-08 09:12:05
+ * @LastEditTime: 2023-12-14 10:09:44
  * @descript: 文件描述
 -->
 <template>
 	<div id="app">
-		<nav>
-			<router-link to="/">Home</router-link> |
-			<router-link to="/about">About</router-link> |
-			<router-link to="/iview_template">iview模板</router-link> | 
-			<router-link to="/element_template">Element模板</router-link>
-		</nav>
 		<router-view />
 	</div>
 </template>
@@ -21,10 +15,10 @@
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	text-align: center;
-	color: #2c3e50;
+    height: 100%;
 	nav {
 		padding: 30px;
+        text-align: center;
 
 		a {
 			font-weight: bold;

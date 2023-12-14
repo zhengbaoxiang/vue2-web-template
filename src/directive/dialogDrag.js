@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 11:19:29
  * @LastEditors: zbx
- * @LastEditTime: 2023-12-08 16:38:28
+ * @LastEditTime: 2023-12-14 16:47:42
  * @descript: 文件描述
  */
 import Vue from 'vue'
@@ -18,7 +18,7 @@ import Vue from 'vue'
 
 Vue.directive('dialogDrag', { // 属性名称dialogDrag，前面加v- 使用
     bind(el, binding, vnode) {
-        console.log('-binding>', binding)
+        // console.log('-binding>', binding)
         const trigger = binding.value && binding.value.trigger
         const body = binding.value && binding.value.body
         const dialogHeaderEl = el.querySelector(trigger || '.el-dialog__header')

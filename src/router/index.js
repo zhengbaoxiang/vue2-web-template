@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 09:45:12
  * @LastEditors: zbx
- * @LastEditTime: 2023-12-13 16:58:27
+ * @LastEditTime: 2023-12-14 16:46:13
  * @descript: 文件描述
  */
 import Vue from 'vue'
@@ -9,7 +9,7 @@ import VueRouter from 'vue-router'
 import routes from './routes'
 
 import config from '@/config'
-import { getToken,setToken ,setSession} from '@/libs/util'
+import { getToken,setToken ,setSession,hasPermission} from '@/libs/util'
 
 import store from '@/store'
 
@@ -26,7 +26,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    console.log('to', to)
+    // console.log('to', to)
     const token = to.query.token || getToken()
 
     if (!token && to.name === loginName) {
@@ -41,7 +41,7 @@ router.beforeEach((to, from, next) => {
         setToken(token)
         store.dispatch('getUserInfo').then(access =>{
             // 判断有无当前页面权限
-            hasPermission(to,access, next)
+            permissionHook(to,access, next)
         }).catch((err)=>{
             // 报错就回到登录页
             // next({ name: loginName })
@@ -52,19 +52,12 @@ router.beforeEach((to, from, next) => {
 
 
 // 权限点处理
-const hasPermission = (to, access, next) => {
-    const routeItemAccess = to.meta && to.meta.access
-
-    if (!routeItemAccess) {
+const permissionHook = (to, access, next) => {
+    if (hasPermission(to,access)) {
         next()
-        return true
-    } else if (hasOneOf(routeItemAccess,access)) {
-        next()
-        return true
     } else {
-        // 无权限，重定向到401页面L
+        // 无权限，重定向到401页面
         next({ replace: true, name: 'error_401' })
-        return false
     }
 }
 

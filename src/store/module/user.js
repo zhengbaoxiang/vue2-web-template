@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-13 16:17:26
  * @LastEditors: zbx
- * @LastEditTime: 2023-12-13 16:58:16
+ * @LastEditTime: 2023-12-14 15:11:16
  * @descript: 文件描述
  */
 import { login, logout, getUserAuth,} from '@/api/user'
@@ -15,7 +15,14 @@ export default {
         auth: {},
         roleList: [],
     },
-    getters: {},
+    getters: {
+        access: (state, getters, rootState) => {
+            return state.access
+        },
+        auth: (state, getters, rootState) => {
+            return state.auth
+        },
+    },
     mutations: {
         setToken(state, token) {
             state.token = token
@@ -53,12 +60,17 @@ export default {
                     const auth = { admin: true }
                     commit('setAccess', access);
                     commit('setUserAuth', auth);
-
                     resolve(access)
                 }).catch(err => {
-                    // resolve(['admin']);
+                    // debug
+                    const access = ['admin']
+                    const auth = { admin: true }
+                    commit('setAccess', access);
+                    commit('setUserAuth', auth);
+                    resolve(access)
+
                     console.log(err)
-                    reject(err)
+                    // reject(err)
                 })
 
             })

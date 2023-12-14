@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-13 10:23:41
  * @LastEditors: zbx
- * @LastEditTime: 2023-12-13 15:10:56
+ * @LastEditTime: 2023-12-14 15:51:10
  * @descript: 文件描述
  */
 import Cookies from 'js-cookie' 
@@ -43,46 +43,47 @@ export const getSession = (k) => {
 export const hasChild = (item) => {
     return item.children && item.children.length !== 0
 }
-
 /**
- * @param {Array} target 目标数组
- * @param {Array} arr 需要查询的数组
  * @description 判断要查询的数组是否至少有一个元素包含在目标数组中
  */
  export const hasOneOf = (targetarr, arr) => {
     return targetarr.some(_ => arr.indexOf(_) > -1)
   }
-
-
-  
-const showThisMenuEle = (item, access) => {
-    if (item.meta && item.meta.access && item.meta.access.length) {
-        if (hasOneOf(item.meta.access, access)) return true
-        else return false
-    } else return true
-}
 /**
- * @param {Array} list 通过路由列表得到菜单列表
- * @returns {Array}
+ * @param {*} routeItem 路由
+ * @param {*} access    用户权限数组，如 ['super_admin', 'admin']
  */
-export const getMenuByRouter = (list, access) => {
+export const hasPermission = (routeItem, access)=>{
+    if (routeItem.meta && routeItem.meta.access && routeItem.meta.access.length) {
+        return hasOneOf(access, routeItem.meta.access)
+    }
+    else return true
+}
+
+/**
+ * @param {Array} routes 路由列表,
+ * @param {Array} access 用户权限数组，如 ['super_admin', 'admin']
+ */
+ export const getMenuByRoutes = (routes, access) => {
     let res = []
-    forEach(list, item => {
-        if (!item.meta || (item.meta && !item.meta.hideInMenu)) {
+    routes.forEach((item)=>{
+        item.meta = item.meta || {}
+        if(!item.meta.hideInMenu && hasPermission(item, access)){
             let obj = {
-                icon: (item.meta && item.meta.icon) || '',
-                name: item.name,
-                meta: item.meta
+                name:item.name,
+                meta:item.meta,
+                icon:item.meta.icon || '',
+                href:item.meta.href || null
             }
-            if ((hasChild(item) || (item.meta && item.meta.showAlways)) && showThisMenuEle(item, access)) {
-                obj.children = getMenuByRouter(item.children, access)
-            }
-            if (item.meta && item.meta.href) obj.href = item.meta.href
-            if (showThisMenuEle(item, access)) res.push(obj)
+            if(hasChild(item) ){
+                obj.children = getMenuByRoutes(item.children, access)
+            } 
+            res.push(obj)    
         }
     })
     return res
 }
+
 
 /**
  * @param {Array} routeMetched 当前路由metched
@@ -162,7 +163,7 @@ export const getTagNavListFromLocalstorage = () => {
 }
 
 /**
- * @param {Array} routers 路由列表数组
+ * @param {Array}  路由列表数组
  * @description 用于找到路由列表中name为home的对象
  */
 export const getHomeRoute = (routers, homeName = 'home') => {
@@ -194,35 +195,7 @@ export const getNewTagList = (list, newRoute) => {
     return newList
 }
 
-/**
- * @param {*} access 用户权限数组，如 ['super_admin', 'admin']
- * @param {*} route 路由列表
- */
-const hasAccess = (access, route) => {
-    if (route.meta && route.meta.access) return hasOneOf(access, route.meta.access)
-    else return true
-}
 
-/**
- * 权鉴
- * @param {*} name 即将跳转的路由name
- * @param {*} access 用户权限数组
- * @param {*} routes 路由列表
- * @description 用户是否可跳转到该页
- */
-export const canTurnTo = (name, access, routes) => {
-    const routePermissionJudge = (list) => {
-        return list.some(item => {
-            if (item.children && item.children.length) {
-                return routePermissionJudge(item.children)
-            } else if (item.name === name) {
-                return hasAccess(access, item)
-            }
-        })
-    }
-
-    return routePermissionJudge(routes)
-}
 
 /**
  * @param {String} url

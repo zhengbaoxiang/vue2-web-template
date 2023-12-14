@@ -200,7 +200,6 @@ export default {
 			this.lookup();
 		},
 		lookup() {
-			console.log("pageInfo", this.pageInfo);
 			this.pageInfo.ppageIndex = 1;
 			this.getTableList();
 		},
