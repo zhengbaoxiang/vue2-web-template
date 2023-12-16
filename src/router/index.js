@@ -1,17 +1,17 @@
 /*
  * @Date: 2023-12-07 09:45:12
  * @LastEditors: zbx
- * @LastEditTime: 2023-12-14 16:46:13
+ * @LastEditTime: 2023-12-16 10:51:08
  * @descript: 文件描述
  */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from './routes'
 
-import config from '@/config'
-import { getToken,setToken ,setSession,hasPermission} from '@/libs/util'
 
+import { getToken,setToken ,setSession,hasPermission} from '@/libs/util'
 import store from '@/store'
+import config from '@/config'
 
 const { homeName, title } = config
 const loginName = 'login'
@@ -43,7 +43,8 @@ router.beforeEach((to, from, next) => {
             // 判断有无当前页面权限
             permissionHook(to,access, next)
         }).catch((err)=>{
-            // 报错就回到登录页
+            // 报错回到登录页？还是404，还是不处理,token需要清空
+            // setToken('')
             // next({ name: loginName })
         })
     }
@@ -74,3 +75,19 @@ const setTitle = (to, vm) => {
 }
 
 export default router
+
+/**
+ *  * 完整的导航解析流程
+    导航被触发。
+    在失活的组件里调用 beforeRouteLeave 守卫。
+    调用全局的 beforeEach 守卫。
+    在重用的组件里调用 beforeRouteUpdate 守卫 (2.2+)。
+    在路由配置里调用 beforeEnter。
+    解析异步路由组件。
+    在被激活的组件里调用 beforeRouteEnter。
+    调用全局的 beforeResolve 守卫 (2.5+)。
+    导航被确认。
+    调用全局的 afterEach 钩子。
+    触发 DOM 更新。
+    调用 beforeRouteEnter 守卫中传给 next 的回调函数，创建好的组件实例会作为回调函数的参数传入。
+*/

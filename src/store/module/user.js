@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-13 16:17:26
  * @LastEditors: zbx
- * @LastEditTime: 2023-12-14 15:11:16
+ * @LastEditTime: 2023-12-16 10:24:09
  * @descript: 文件描述
  */
 import { login, logout, getUserAuth,} from '@/api/user'
@@ -62,6 +62,8 @@ export default {
                     commit('setUserAuth', auth);
                     resolve(access)
                 }).catch(err => {
+                    console.log(err)
+
                     // debug
                     const access = ['admin']
                     const auth = { admin: true }
@@ -69,7 +71,6 @@ export default {
                     commit('setUserAuth', auth);
                     resolve(access)
 
-                    console.log(err)
                     // reject(err)
                 })
 
