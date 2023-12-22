@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-13 16:17:26
  * @LastEditors: zbx
- * @LastEditTime: 2023-12-16 10:24:09
+ * @LastEditTime: 2023-12-22 17:39:18
  * @descript: 文件描述
  */
 import { login, logout, getUserAuth,} from '@/api/user'
@@ -47,6 +47,14 @@ export default {
 
     },
     actions: {
+        login ({ state, commit },data){
+            return new Promise((resolve,reject)=>{
+                setTimeout(() => {
+                    setToken('admin')
+                    resolve(123)
+                }, 500);
+            })
+        },
         getUserInfo({ state, commit }) {
             return new Promise((resolve, reject) => {
                 // 调鉴权接口

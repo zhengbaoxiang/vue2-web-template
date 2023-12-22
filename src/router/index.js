@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 09:45:12
  * @LastEditors: zbx
- * @LastEditTime: 2023-12-16 10:51:08
+ * @LastEditTime: 2023-12-22 17:29:27
  * @descript: 文件描述
  */
 import Vue from 'vue'
@@ -44,7 +44,7 @@ router.beforeEach((to, from, next) => {
             permissionHook(to,access, next)
         }).catch((err)=>{
             // 报错回到登录页？还是404，还是不处理,token需要清空
-            // setToken('')
+            // setToken('123321')
             // next({ name: loginName })
         })
     }
