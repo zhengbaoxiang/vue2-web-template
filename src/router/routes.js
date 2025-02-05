@@ -40,7 +40,7 @@ export default [
                 meta: {
                     title: '首页'
                 },
-                component: () => import('@/view/home/HomeView.vue'),
+                component: () => import('@/view/home/HomeView2.vue'),
 
             }
         ]
