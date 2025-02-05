@@ -1,7 +1,7 @@
 <!--
  * @Date: 2023-12-13 17:36:18
  * @LastEditors: zbx
- * @LastEditTime: 2025-02-05 15:18:16
+ * @LastEditTime: 2025-02-05 16:19:06
  * @descript: 文件描述
 -->
 <template>
@@ -55,7 +55,6 @@ export default {
 
             // 方向光默认指向xyz坐标原点
             scene.add(directionalLight);
-
 
 
             // 实例化一个透视投影相机对象
